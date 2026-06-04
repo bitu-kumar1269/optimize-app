@@ -1,0 +1,1 @@
+console.log("CI-CD and Docker is running scuessfully");
