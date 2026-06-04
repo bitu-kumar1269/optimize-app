@@ -27,3 +27,6 @@ jobs:
 
       - name: Verify Image
         run: docker images
+
+      - name: Check Running Containers
+        run: docker ps
