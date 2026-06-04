@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/bitu-kumar1269/optimize-app.git'
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 sh 'docker build -t bitukumar/optimize-app:v1 .'
@@ -19,11 +13,11 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
-                    usernameVariable: 'bitukumar',
+                    usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASSWORD'
                 )]) {
                     sh '''
-                    echo $DOCKER_PASSWORD | docker login -u bitukumar --password-stdin
+                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
                     docker push bitukumar/optimize-app:v1
                     '''
                 }
