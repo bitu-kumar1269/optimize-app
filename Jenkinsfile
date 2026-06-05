@@ -5,7 +5,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t bitukumar/optimize-app:v1 .'
+                sh '/usr/local/bin/docker build -t bitukumar/optimize-app:v1 .'
             }
         }
 
@@ -14,11 +14,11 @@ pipeline {
                 withCredentials([usernamePassword(
                     credentialsId: 'dockerhub-creds',
                     usernameVariable: 'DOCKER_USER',
-                    passwordVariable: 'DOCKER_PASSWORD'
+                    passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
-                    docker push bitukumar/optimize-app:v1
+                    echo $DOCKER_PASS | /usr/local/bin/docker login -u $DOCKER_USER --password-stdin
+                    /usr/local/bin/docker push bitukumar/optimize-app:v1
                     '''
                 }
             }
@@ -27,8 +27,8 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh '''
-                docker rm -f optimize-app || true
-                docker run -d -p 3006:3006 --name optimize-app bitukumar/optimize-app:v1
+                /usr/local/bin/docker rm -f optimize-app || true
+                /usr/local/bin/docker run -d -p 3006:3006 --name optimize-app bitukumar/optimize-app:v1
                 '''
             }
         }
